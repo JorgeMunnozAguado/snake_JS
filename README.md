@@ -1,2 +1,2 @@
-# snake_JS
+# JavaScript Snake
 Snake Game made with JavaScript.
