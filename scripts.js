@@ -3,8 +3,8 @@ var CantY;
 
 function calculateCant() {
 
-    CantX = Math.floor( screen.width / 21 );
-    CantY = Math.floor( screen.height / 21 );
+    CantX = Math.floor( window.innerWidth / 21 );
+    CantY = Math.floor( window.innerHeight / 21 );
     
     CantX--;
     CantY--;
