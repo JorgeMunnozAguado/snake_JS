@@ -29,6 +29,8 @@ function calculateCant() {
     CantX--;
     CantY--;
     
+    
+    document.getElementById(snake.pices[0].posX + 'x' + snake.pices[0].posY).classList.add('snake');
     setInterval(nextPosition, 1000/15);
     setFood();
 }
@@ -39,15 +41,13 @@ function Pice(posX, posY) {
     this.posY = posY;
 }
 
-//var pice = {posX: 0, posY: 0};
 var pic = new Pice(0, 0);
 var snake = {size: 1, pices: []};
 
-var food = {posX: 0, posY: 0};
+var food = new Pice(0, 0);
 
 snake.pices.push(pic);
-/*snake.pices.push(pice = {posX: 1, posY: 0});*/
-document.getElementById(snake.pices[0].posX + 'x' + snake.pices[0].posY).classList.add('snake');
+
 
 
 var keyEvent = "";
@@ -96,6 +96,20 @@ function nextPosition() {
 
 function rules() {
     
+    for (i = snake.pices.length - 1; i > 0; i--) {
+        
+        if ((snake.pices[0].posY == snake.pices[i].posY) && (snake.pices[0].posX == snake.pices[i].posX)) {
+            
+            for (i = snake.pices.length - 1; i > 0; i--) {
+                document.getElementById(snake.pices[i].posX + 'x' + snake.pices[i].posY).classList.remove('snake');
+            }
+            
+            snake.pices.splice(1, snake.pices.length - 1);
+            
+            //AÑADIR PUNTUACIÓN
+        }
+    }
+    
     if ((snake.pices[0].posY == food.posY) && (snake.pices[0].posX == food.posX)) {
         
         var posX = snake.pices[snake.pices.length - 1].posX;
@@ -107,6 +121,9 @@ function rules() {
         posY = snake.pices[snake.pices.length - 1].posY;
         
         snake.pices.push(newPice);
+        
+        document.getElementById(food.posX + 'x' + food.posY).classList.remove('food');
+        setFood();
     }
 }
 
