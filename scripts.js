@@ -42,12 +42,25 @@ function Pice(posX, posY) {
 }
 
 var pic = new Pice(0, 0);
-var snake = {size: 1, pices: []};
+var snake = {size: 1, pices: [], dir: 0};
 
 var food = new Pice(0, 0);
+var points = 0;
 
 snake.pices.push(pic);
 
+/**
+ Directions of the snake:
+
+    - 0 : not moving.
+    - 1 : left
+    - 2 : up
+    - 3 : right
+    - 4 : down
+
+*/
+
+var Directions = Object.freeze({"NOT_MOVING":0, "LEFT":1, "UP":2, "RIGHT":3, "DOWN":4})
 
 
 var keyEvent = "";
@@ -55,6 +68,16 @@ var keyEvent = "";
 function handle(event) {
 
     keyEvent = event.key;
+    
+    if (keyEvent == 'ArrowUp' && snake.dir == Directions.DOWN) snake.dir = Directions.DOWN;
+    else if (keyEvent == 'ArrowDown' && snake.dir == Directions.UP) snake.dir = Directions.UP;
+    else if (keyEvent == 'ArrowLeft' && snake.dir == Directions.RIGHT) snake.dir = Directions.RIGHT;
+    else if (keyEvent == 'ArrowRight' && snake.dir == Directions.LEFT) snake.dir = Directions.LEFT;
+    
+    else if (keyEvent == 'ArrowUp') snake.dir = Directions.UP;
+    else if (keyEvent == 'ArrowDown') snake.dir = Directions.DOWN;
+    else if (keyEvent == 'ArrowLeft') snake.dir = Directions.LEFT;
+    else if (keyEvent == 'ArrowRight') snake.dir = Directions.RIGHT;
 }
 
 function nextPosition() {
@@ -67,27 +90,35 @@ function nextPosition() {
         snake.pices[i].posY = snake.pices[i - 1].posY;
     }
     
-    if (keyEvent == 'ArrowUp'){
+    if (snake.dir == Directions.UP) {
         
         if (snake.pices[0].posY == 0) snake.pices[0].posY = CantY;
         else snake.pices[0].posY--;
         
-    } else if (keyEvent == 'ArrowDown'){
+        snake.dir = Directions.UP;
+        
+    } else if (snake.dir == Directions.DOWN) {
         
         if (snake.pices[0].posY == CantY) snake.pices[0].posY = 0;
         else snake.pices[0].posY++;
+                
+        snake.dir = Directions.DOWN;
         
-    } else if (keyEvent == 'ArrowLeft'){
+    } else if (snake.dir == Directions.LEFT) {
         
         if (snake.pices[0].posX == 0) snake.pices[0].posX = CantX;
         else snake.pices[0].posX--;
-        
-    } else if (keyEvent == 'ArrowRight'){
+                
+        snake.dir = Directions.LEFT;
+     
+    } else if (snake.dir == Directions.RIGHT) {
         
         if (snake.pices[0].posX == CantX) snake.pices[0].posX = 0;
         else snake.pices[0].posX++;
+                
+        snake.dir = Directions.RIGHT;
         
-    } //else...
+    }
     
     document.getElementById(snake.pices[0].posX + 'x' + snake.pices[0].posY).classList.add('snake');
     
@@ -105,12 +136,17 @@ function rules() {
             }
             
             snake.pices.splice(1, snake.pices.length - 1);
+            dir = 0;
             
-            //AÑADIR PUNTUACIÓN
+            window.alert("Tu puntuación es de " + points + " puntos.");
+            
+            points = 0;
         }
     }
     
     if ((snake.pices[0].posY == food.posY) && (snake.pices[0].posX == food.posX)) {
+        
+        points++;
         
         var posX = snake.pices[snake.pices.length - 1].posX;
         var posY = snake.pices[snake.pices.length - 1].posY;
